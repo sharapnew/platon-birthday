@@ -672,15 +672,21 @@
     }
 
     async function toggleClaim(id, claimed) {
+      state = state.map(item => item.id === id ? { ...item, claimed } : item);
+      render();
+
       const { error } = await supabaseClient
         .from(TABLE_NAME)
         .update({ claimed, claimed_at: claimed ? new Date().toISOString() : null })
         .eq("id", id);
+
       if (error) {
+        state = state.map(item => item.id === id ? { ...item, claimed: !claimed } : item);
+        render();
         alert("Could not save that change right now.");
         await loadSupabase();
+        render();
       }
-      render();
     }
 
     async function startLiveSync() {
