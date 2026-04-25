@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Platon's Three-Rex Birthday</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --cream: #fbf7ef;
@@ -12,9 +13,7 @@
       --blue: #5058b5;
       --blue-deep: #3f4696;
       --green: #9bb33d;
-      --sage: #dfe7c9;
       --coral: #ea7a63;
-      --pink: #f28ea4;
       --gold: #efbf57;
       --shadow: 0 20px 60px rgba(67, 53, 34, 0.14);
       --radius: 28px;
@@ -171,7 +170,9 @@
       padding: 14px 16px;
       backdrop-filter: blur(2px);
     }
+
     .detail.span-3 { grid-column: 1 / -1; }
+
     .detail span {
       display: block;
       font-size: 0.82rem;
@@ -181,6 +182,7 @@
       margin-bottom: 6px;
       font-weight: 700;
     }
+
     .detail strong, .detail a {
       display: block;
       font-size: 1rem;
@@ -189,6 +191,7 @@
       text-decoration: none;
       font-weight: 800;
     }
+
     .detail a:hover { text-decoration: underline; }
 
     .scroll-hint {
@@ -207,6 +210,7 @@
       position: relative;
       z-index: 2;
     }
+
     .scroll-hint:hover { transform: translateY(-1px); }
 
     .mini-note {
@@ -315,6 +319,7 @@
       font-weight: 700;
       text-decoration: none;
     }
+
     .gift-links a:hover { text-decoration: underline; }
 
     .badge {
@@ -352,7 +357,13 @@
       height: 34px;
       display: inline-block;
     }
-    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
     .slider {
       position: absolute;
       inset: 0;
@@ -361,6 +372,7 @@
       border-radius: 999px;
       transition: 0.2s ease;
     }
+
     .slider::before {
       content: "";
       position: absolute;
@@ -373,6 +385,7 @@
       transition: 0.2s ease;
       box-shadow: 0 5px 12px rgba(0,0,0,0.16);
     }
+
     .switch input:checked + .slider { background: rgba(168, 181, 79, 0.85); }
     .switch input:checked + .slider::before { transform: translateX(26px); }
 
@@ -408,8 +421,6 @@
       line-height: 1;
       opacity: 0.95;
     }
-
-    .svg-decor svg { display: block; }
 
     .dino-a { top: 24px; right: 46px; transform: rotate(-8deg); }
     .dino-b { bottom: 28px; right: 22px; transform: rotate(4deg); }
@@ -541,16 +552,14 @@
       <div class="wish-head">
         <div>
           <h2>Platon's roarsome wish-list</h2>
-          <p>
-            Pick a present and flip the toggle to mark it as taken.
-          </p>
+          <p>Pick a present and flip the toggle to mark it as taken.</p>
           <div class="message-box">
             This list is <strong>not mandatory</strong>. Your own ideas for presents are very welcome.
             The most important is your <strong>presence and smiles on the day</strong>.<br />
             <strong>Please no cars or soft toys.</strong>
           </div>
         </div>
-        <div class="mode-pill">Ready to use</div>
+        <div class="mode-pill" id="modePill">Connecting…</div>
       </div>
 
       <div class="table-shell">
@@ -568,14 +577,16 @@
         </table>
       </div>
 
-      <p class="footnote">
-        Prices are shown as rounded-up whole pounds and may vary a little over time depending on the retailer.
-      </p>
+      <p class="footnote">Prices are shown as rounded-up whole pounds and may vary a little over time depending on the retailer.</p>
       <a class="footer-nudge" href="#invite">↑ Back to invitation</a>
     </div>
   </section>
 
   <script>
+    const SUPABASE_URL = "https://ugnmiuunxrydvuuyofrj.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnbm1pdXVueHJ5ZHZ1dXlvZnJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNDY3MTYsImV4cCI6MjA5MjcyMjcxNn0.PawVzw-foEzyAwMMJLf1DjWpHQjAJxKO5maObTuPWLM";
+    const TABLE_NAME = "platon_wishlist";
+
     const defaultGifts = [
       { id: "ravensburger-123", sort: 1, title: "Ravensburger My First 1,2,3 Educational Games", price: 18, shop: "Amazon", url: "https://www.amazon.co.uk/gp/aw/d/B096CNYDZG/ref=ox_sc_act_image_1?smid=A18D0J20U8U8YH&psc=1" },
       { id: "foto-fish", sort: 2, title: "Foto Fish", price: 25, shop: "Toy Street", url: "https://www.toystreet.co.uk/product/foto-fish/?currency=GBP&gad_source=1&gad_campaignid=20471665101&gbraid=0AAAAADJNLNyyH5rd_BoPq5v4si-QHSTSh&gclid=Cj0KCQiAhaHMBhD2ARIsAPAU_D72CXM2sDXtj8TT5cJbqi-S4FuIzOUKW53zJE9ufuB0QS9SVGaulx0aAoQZEALw_wcB" },
@@ -592,48 +603,21 @@
       { id: "mini-micro", sort: 13, title: "Mini Micro Foldable LED Navy scooter", price: 107, shop: "Micro Scooters", url: "https://www.micro-scooters.co.uk/products/mini-micro-scooter-foldable-light-up-navy?_pos=1&_fid=59a99faa8&_ss=c" }
     ];
 
-    const STORAGE_KEY = 'platon-birthday-wishlist-v2';
-    const CHANNEL_NAME = 'platon-birthday-wishlist-channel';
     let state = [];
-
-    function loadState() {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) {
-        state = defaultGifts.map(item => ({ ...item, claimed: false }));
-        saveState();
-        return;
-      }
-      try {
-        const parsed = JSON.parse(raw);
-        const claimedMap = new Map(parsed.map(item => [item.id, item.claimed]));
-        state = defaultGifts.map(item => ({ ...item, claimed: Boolean(claimedMap.get(item.id)) }));
-      } catch {
-        state = defaultGifts.map(item => ({ ...item, claimed: false }));
-        saveState();
-      }
-    }
-
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      if ('BroadcastChannel' in window) {
-        const channel = new BroadcastChannel(CHANNEL_NAME);
-        channel.postMessage({ type: 'sync' });
-        channel.close();
-      }
-    }
+    let supabaseClient = null;
 
     function render() {
-      const tbody = document.getElementById('wishlistBody');
+      const tbody = document.getElementById("wishlistBody");
       tbody.innerHTML = state.map(item => {
         const status = item.claimed
           ? '<span class="badge taken">Taken</span>'
           : '<span class="badge">Available</span>';
 
         return `
-          <tr class="${item.claimed ? 'claimed' : ''}">
+          <tr class="${item.claimed ? "claimed" : ""}">
             <td data-label="Claim">
               <label class="switch" aria-label="Claim ${item.title}">
-                <input type="checkbox" data-id="${item.id}" ${item.claimed ? 'checked' : ''} />
+                <input type="checkbox" data-id="${item.id}" ${item.claimed ? "checked" : ""} />
                 <span class="slider"></span>
               </label>
             </td>
@@ -646,40 +630,94 @@
             <td data-label="Status">${status}</td>
           </tr>
         `;
-      }).join('');
+      }).join("");
     }
 
-    function toggleClaim(id, claimed) {
-      state = state.map(item => item.id === id ? { ...item, claimed } : item);
-      saveState();
-      render();
-    }
-
-    function initSync() {
-      window.addEventListener('storage', (event) => {
-        if (event.key === STORAGE_KEY) {
-          loadState();
-          render();
-        }
-      });
-
-      if ('BroadcastChannel' in window) {
-        const channel = new BroadcastChannel(CHANNEL_NAME);
-        channel.addEventListener('message', () => {
-          loadState();
-          render();
-        });
+    async function seedSupabaseIfNeeded() {
+      const { data, error } = await supabaseClient.from(TABLE_NAME).select("id");
+      if (error) throw error;
+      const existing = new Set((data || []).map(item => item.id));
+      const missing = defaultGifts
+        .filter(item => !existing.has(item.id))
+        .map(item => ({
+          id: item.id,
+          sort: item.sort,
+          title: item.title,
+          price: item.price,
+          shop: item.shop,
+          url: item.url,
+          claimed: false
+        }));
+      if (missing.length) {
+        const { error: insertError } = await supabaseClient.from(TABLE_NAME).insert(missing);
+        if (insertError) throw insertError;
       }
     }
 
-    function init() {
-      loadState();
+    async function loadSupabase() {
+      const { data, error } = await supabaseClient
+        .from(TABLE_NAME)
+        .select("*")
+        .order("sort", { ascending: true });
+      if (error) throw error;
+      state = (data || []).map(item => ({
+        id: item.id,
+        sort: item.sort,
+        title: item.title,
+        price: item.price,
+        shop: item.shop,
+        url: item.url,
+        claimed: Boolean(item.claimed)
+      }));
+    }
+
+    async function toggleClaim(id, claimed) {
+      const { error } = await supabaseClient
+        .from(TABLE_NAME)
+        .update({ claimed, claimed_at: claimed ? new Date().toISOString() : null })
+        .eq("id", id);
+      if (error) {
+        alert("Could not save that change right now.");
+        await loadSupabase();
+      }
       render();
-      initSync();
-      document.getElementById('wishlistBody').addEventListener('change', (event) => {
+    }
+
+    async function startLiveSync() {
+      supabaseClient
+        .channel("platon-wishlist-sync")
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: TABLE_NAME },
+          async () => {
+            await loadSupabase();
+            render();
+          }
+        )
+        .subscribe();
+    }
+
+    async function init() {
+      try {
+        if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !window.supabase) {
+          throw new Error("Supabase details missing.");
+        }
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        await seedSupabaseIfNeeded();
+        await loadSupabase();
+        await startLiveSync();
+        document.getElementById("modePill").textContent = "Live for all guests";
+      } catch (error) {
+        console.error(error);
+        document.getElementById("modePill").textContent = "Connection issue";
+        alert("The shared wishlist could not connect yet. Please check Supabase setup.");
+      }
+
+      render();
+      document.getElementById("wishlistBody").addEventListener("change", async (event) => {
         const input = event.target;
-        if (!(input instanceof HTMLInputElement) || input.type !== 'checkbox') return;
-        toggleClaim(input.dataset.id, input.checked);
+        if (!(input instanceof HTMLInputElement) || input.type !== "checkbox") return;
+        await toggleClaim(input.dataset.id, input.checked);
       });
     }
 
