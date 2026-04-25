@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Platon's Three-Rex Birthday</title>
+  <style>
+    :root {
+      --cream: #fbf7ef;
+      --paper: rgba(255,255,255,0.9);
+      --ink: #3b2b21;
+      --blue: #5058b5;
+      --blue-deep: #3f4696;
+      --green: #9bb33d;
+      --sage: #dfe7c9;
+      --coral: #ea7a63;
+      --pink: #f28ea4;
+      --gold: #efbf57;
+      --shadow: 0 20px 60px rgba(67, 53, 34, 0.14);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(168, 181, 79, 0.2), transparent 28%),
+        radial-gradient(circle at top right, rgba(80, 88, 181, 0.12), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(242, 142, 164, 0.14), transparent 24%),
+        linear-gradient(180deg, #faf7ef 0%, #f3efe4 100%);
+      overflow-x: hidden;
+    }
+
+    .panel {
+      min-height: 100svh;
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: 24px 16px 36px;
+      isolation: isolate;
+    }
+
+    .card {
+      width: min(1140px, 100%);
+      border-radius: calc(var(--radius) + 6px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+      border: 1px solid rgba(88, 72, 52, 0.08);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .invite-copy {
+      padding: clamp(32px, 5vw, 66px);
+      position: relative;
+      min-height: min(100svh - 72px, 960px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.82)),
+        radial-gradient(circle at 8% 14%, rgba(242, 142, 164, 0.12), transparent 24%),
+        radial-gradient(circle at 92% 14%, rgba(239, 191, 87, 0.16), transparent 22%),
+        radial-gradient(circle at 14% 90%, rgba(168, 181, 79, 0.2), transparent 24%),
+        radial-gradient(circle at 90% 85%, rgba(80, 88, 181, 0.12), transparent 24%);
+    }
+
+    .wishlist-wrap {
+      padding: clamp(24px, 3vw, 40px);
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.88)),
+        radial-gradient(circle at 0% 10%, rgba(168,181,79,0.12), transparent 26%),
+        radial-gradient(circle at 100% 12%, rgba(239,191,87,0.12), transparent 24%),
+        radial-gradient(circle at 14% 100%, rgba(80,88,181,0.1), transparent 26%);
+    }
+
+    .eyebrow {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: clamp(1rem, 1.7vw, 1.25rem);
+      margin: 0 0 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-word,
+    .platon-name {
+      font-size: clamp(3rem, 8vw, 6.1rem);
+      line-height: 0.93;
+      letter-spacing: 0.02em;
+      color: var(--blue);
+      text-shadow: 0 5px 0 rgba(61, 72, 155, 0.14);
+      font-weight: 900;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-word { margin: 0; }
+
+    .hero-sub {
+      font-family: Georgia, "Times New Roman", serif;
+      text-transform: uppercase;
+      font-size: clamp(1.6rem, 3vw, 2.7rem);
+      line-height: 1.05;
+      margin: 0.35rem 0 1rem;
+      font-weight: 800;
+      position: relative;
+      z-index: 2;
+    }
+
+    .body-copy {
+      max-width: 42rem;
+      font-size: clamp(1rem, 1.55vw, 1.18rem);
+      line-height: 1.55;
+      margin: 0 0 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .birthday-line {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 16px 0 26px;
+      padding: 18px 0;
+      border-top: 2px solid rgba(59, 43, 33, 0.15);
+      border-bottom: 2px solid rgba(59, 43, 33, 0.15);
+      position: relative;
+      z-index: 2;
+    }
+
+    .age {
+      font-size: clamp(2.8rem, 6vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1;
+      color: var(--coral);
+      text-transform: uppercase;
+    }
+
+    .birthday-text {
+      font-size: clamp(1.8rem, 4.4vw, 3.3rem);
+      line-height: 1;
+      font-weight: 900;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin: 8px 0 26px;
+      max-width: 760px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .detail {
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(59,43,33,0.1);
+      border-radius: 18px;
+      padding: 14px 16px;
+      backdrop-filter: blur(2px);
+    }
+    .detail.span-3 { grid-column: 1 / -1; }
+    .detail span {
+      display: block;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.65;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    .detail strong, .detail a {
+      display: block;
+      font-size: 1rem;
+      min-height: 1.45em;
+      color: inherit;
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .detail a:hover { text-decoration: underline; }
+
+    .scroll-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+      padding: 12px 18px;
+      background: var(--blue);
+      color: white;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(80, 88, 181, 0.25);
+      width: fit-content;
+      position: relative;
+      z-index: 2;
+    }
+    .scroll-hint:hover { transform: translateY(-1px); }
+
+    .mini-note {
+      margin-top: 14px;
+      font-weight: 800;
+      color: #d2772a;
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      position: relative;
+      z-index: 2;
+    }
+
+    .wish-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .wish-head h2 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.15rem);
+      line-height: 1;
+      color: var(--blue-deep);
+    }
+
+    .wish-head p {
+      margin: 8px 0 0;
+      max-width: 54rem;
+      line-height: 1.55;
+      font-size: 1rem;
+    }
+
+    .message-box {
+      margin-top: 14px;
+      max-width: 58rem;
+      background: rgba(255, 247, 214, 0.7);
+      border: 1px solid rgba(234, 122, 99, 0.2);
+      border-radius: 20px;
+      padding: 14px 16px;
+      line-height: 1.6;
+      font-size: 1rem;
+      box-shadow: 0 10px 24px rgba(67,53,34,0.06);
+    }
+
+    .message-box strong { color: var(--blue-deep); }
+
+    .mode-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(80, 88, 181, 0.1);
+      color: var(--blue-deep);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .table-shell {
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid rgba(59,43,33,0.09);
+      background: rgba(255,255,255,0.76);
+      position: relative;
+      z-index: 2;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      text-align: left;
+      padding: 16px 14px;
+      background: rgba(80, 88, 181, 0.08);
+      color: var(--ink);
+      font-size: 0.86rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    tbody td {
+      padding: 14px;
+      border-top: 1px solid rgba(59,43,33,0.08);
+      vertical-align: middle;
+    }
+
+    tbody tr.claimed {
+      background: rgba(168, 181, 79, 0.12);
+    }
+
+    tbody tr.claimed .gift-title {
+      text-decoration: line-through;
+      opacity: 0.75;
+    }
+
+    .gift-title {
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .gift-links a {
+      color: var(--blue-deep);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .gift-links a:hover { text-decoration: underline; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      padding: 8px 12px;
+      font-weight: 800;
+      background: rgba(168, 181, 79, 0.18);
+      color: #4f6125;
+    }
+
+    .badge.taken {
+      background: rgba(234, 122, 99, 0.18);
+      color: #8e3924;
+    }
+
+    .price-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 72px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      color: var(--blue-deep);
+      background: rgba(80, 88, 181, 0.1);
+    }
+
+    .switch {
+      position: relative;
+      width: 60px;
+      height: 34px;
+      display: inline-block;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+      background: rgba(80, 88, 181, 0.18);
+      border-radius: 999px;
+      transition: 0.2s ease;
+    }
+    .slider::before {
+      content: "";
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      left: 4px;
+      top: 4px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.2s ease;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.16);
+    }
+    .switch input:checked + .slider { background: rgba(168, 181, 79, 0.85); }
+    .switch input:checked + .slider::before { transform: translateX(26px); }
+
+    .footnote {
+      margin-top: 16px;
+      font-size: 0.96rem;
+      line-height: 1.55;
+      opacity: 0.88;
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-nudge {
+      margin-top: 18px;
+      display: inline-block;
+      color: var(--blue-deep);
+      font-weight: 800;
+      text-decoration: none;
+      position: relative;
+      z-index: 2;
+    }
+
+    .decor {
+      position: absolute;
+      pointer-events: none;
+      user-select: none;
+      z-index: 1;
+      filter: drop-shadow(0 12px 22px rgba(0,0,0,0.08));
+    }
+
+    .emoji-decor {
+      font-size: clamp(2.2rem, 5vw, 5rem);
+      line-height: 1;
+      opacity: 0.95;
+    }
+
+    .svg-decor svg { display: block; }
+
+    .dino-a { top: 24px; right: 46px; transform: rotate(-8deg); }
+    .dino-b { bottom: 28px; right: 22px; transform: rotate(4deg); }
+    .dino-c { bottom: 34px; left: 18px; transform: rotate(-5deg); }
+    .dino-d { top: 150px; left: 28px; transform: rotate(-10deg); }
+    .dino-e { top: 26px; right: 28px; transform: rotate(-4deg); }
+    .dino-f { bottom: 18px; left: 20px; transform: rotate(-6deg); }
+    .dino-g { top: 160px; right: 16px; transform: rotate(6deg); }
+    .dino-h { bottom: 42px; right: 34px; transform: rotate(2deg); }
+
+    .leaf-cluster {
+      position: absolute;
+      width: 180px;
+      height: 140px;
+      opacity: 0.34;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .leaf-cluster span {
+      position: absolute;
+      display: block;
+      width: 60px;
+      height: 100px;
+      border-radius: 60px 60px 60px 60px / 100px 100px 40px 40px;
+      background: linear-gradient(180deg, #9bc05b, #6f9440);
+    }
+
+    .leaf-cluster span::after {
+      content: "";
+      position: absolute;
+      left: 28px;
+      top: 12px;
+      width: 4px;
+      height: 76px;
+      background: rgba(255,255,255,0.35);
+      border-radius: 2px;
+    }
+
+    .leaf-left { left: -16px; bottom: 60px; }
+    .leaf-right { right: -10px; top: 90px; }
+    .leaf-left span:nth-child(1) { left: 8px; bottom: 0; transform: rotate(-16deg); }
+    .leaf-left span:nth-child(2) { left: 54px; bottom: 10px; transform: rotate(8deg); }
+    .leaf-left span:nth-child(3) { left: 100px; bottom: 0; transform: rotate(24deg); }
+    .leaf-right span:nth-child(1) { left: 8px; top: 30px; transform: rotate(-22deg); }
+    .leaf-right span:nth-child(2) { left: 54px; top: 10px; transform: rotate(10deg); }
+    .leaf-right span:nth-child(3) { left: 106px; top: 34px; transform: rotate(28deg); }
+
+    @media (max-width: 860px) {
+      .details { grid-template-columns: 1fr; }
+      .detail.span-3 { grid-column: auto; }
+      thead { display: none; }
+      table, tbody, tr, td { display: block; width: 100%; }
+      tbody tr { padding: 10px 0; }
+      tbody td { border-top: none; padding: 8px 14px; }
+      tbody td[data-label]::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        opacity: 0.6;
+        margin-bottom: 6px;
+        font-weight: 800;
+      }
+      .dino-a, .dino-d, .dino-g { opacity: 0.55; }
+      .emoji-decor { font-size: clamp(2rem, 10vw, 4rem); }
+    }
+  </style>
+</head>
+<body>
+  <section class="panel" id="invite">
+    <div class="card">
+      <div class="invite-copy">
+        <div class="leaf-cluster leaf-left"><span></span><span></span><span></span></div>
+        <div class="leaf-cluster leaf-right"><span></span><span></span><span></span></div>
+
+        <div class="decor emoji-decor dino-a">🦕</div>
+        <div class="decor emoji-decor dino-b">🦖</div>
+        <div class="decor emoji-decor dino-c">🌋</div>
+        <div class="decor emoji-decor dino-d">🦴</div>
+        <div class="decor emoji-decor" style="top: 84px; left: 44%;">🥚</div>
+        <div class="decor emoji-decor" style="bottom: 120px; left: 60%;">🌿</div>
+        <div class="decor emoji-decor" style="top: 240px; right: 26%;">⭐</div>
+
+        <p class="eyebrow">There's a</p>
+        <h1 class="hero-word">THREE-REX</h1>
+        <div class="hero-sub">on the loose!</div>
+        <p class="body-copy">
+          Let out a <strong>ROAR</strong> and join us for a <strong>THREE-historic</strong>
+          celebration for <strong>Platon's 3rd birthday</strong>.
+          Come ready for smiles, games, soft play, cake and lots of dinosaur fun.
+        </p>
+
+        <div class="birthday-line">
+          <span class="platon-name">Platon's</span>
+          <span class="age">3RD</span>
+          <span class="birthday-text">Birthday</span>
+        </div>
+
+        <div class="details">
+          <div class="detail">
+            <span>Date</span>
+            <strong>16 May</strong>
+          </div>
+          <div class="detail">
+            <span>Time</span>
+            <strong>11:30</strong>
+          </div>
+          <div class="detail span-3">
+            <span>Place</span>
+            <a href="https://www.bubblessoftplay.uk/" target="_blank" rel="noreferrer">Bubbles Soft Play</a>
+          </div>
+        </div>
+
+        <a class="scroll-hint" href="#wishlist">Scroll down for the wish-list ↓</a>
+        <div class="mini-note">Stomp. Chomp. Roar. Let's party like a dinosaur!</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="wishlist">
+    <div class="card wishlist-wrap">
+      <div class="decor emoji-decor dino-e">🦕</div>
+      <div class="decor emoji-decor dino-f">🪨</div>
+      <div class="decor emoji-decor dino-g">🦖</div>
+      <div class="decor emoji-decor dino-h">🌴</div>
+
+      <div class="wish-head">
+        <div>
+          <h2>Platon's roarsome wish-list</h2>
+          <p>
+            Pick a present and flip the toggle to mark it as taken.
+          </p>
+          <div class="message-box">
+            This list is <strong>not mandatory</strong>. Your own ideas for presents are very welcome.
+            The most important is your <strong>presence and smiles on the day</strong>.<br />
+            <strong>Please no cars or soft toys.</strong>
+          </div>
+        </div>
+        <div class="mode-pill">Ready to use</div>
+      </div>
+
+      <div class="table-shell">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 120px;">Claim</th>
+              <th>Present</th>
+              <th style="width: 110px;">Price</th>
+              <th style="width: 150px;">Shop</th>
+              <th style="width: 140px;">Status</th>
+            </tr>
+          </thead>
+          <tbody id="wishlistBody"></tbody>
+        </table>
+      </div>
+
+      <p class="footnote">
+        Prices are shown as rounded-up whole pounds and may vary a little over time depending on the retailer.
+      </p>
+      <a class="footer-nudge" href="#invite">↑ Back to invitation</a>
+    </div>
+  </section>
+
+  <script>
+    const defaultGifts = [
+      { id: "ravensburger-123", sort: 1, title: "Ravensburger My First 1,2,3 Educational Games", price: 18, shop: "Amazon", url: "https://www.amazon.co.uk/gp/aw/d/B096CNYDZG/ref=ox_sc_act_image_1?smid=A18D0J20U8U8YH&psc=1" },
+      { id: "foto-fish", sort: 2, title: "Foto Fish", price: 25, shop: "Toy Street", url: "https://www.toystreet.co.uk/product/foto-fish/?currency=GBP&gad_source=1&gad_campaignid=20471665101&gbraid=0AAAAADJNLNyyH5rd_BoPq5v4si-QHSTSh&gclid=Cj0KCQiAhaHMBhD2ARIsAPAU_D72CXM2sDXtj8TT5cJbqi-S4FuIzOUKW53zJE9ufuB0QS9SVGaulx0aAoQZEALw_wcB" },
+      { id: "magnetic-blocks-40", sort: 3, title: "Magnetic Blocks 40-Piece Building Set", price: 30, shop: "Smyths Toys", url: "https://www.smythstoys.com/uk/en-gb/toys/construction-and-cars/magnetic-tiles-and-building-blocks/magnetic-blocks-40-piece-building-set/p/244565?srsltid=AfmBOorJh8FWvibVtOEfJs-TQkBtXThhvZtWDUKXzZqbTlm6UxQgxPBF-ss" },
+      { id: "lego-10696", sort: 4, title: "LEGO Medium Creative Brick Box 10696", price: 25, shop: "LEGO", url: "https://www.lego.com/en-gb/product/lego-medium-creative-brick-box-10696?CMP=AFC-AffiliateUK-pfxNKSnglIM-3354356-1778153-15" },
+      { id: "camelot-jr", sort: 5, title: "SmartGames Camelot Jr", price: 26, shop: "Amazon", url: "https://www.amazon.co.uk/Smart-518716-Games-Camelot-Jr/dp/B01MRUSZ1Y/ref=asc_df_B01MRUSZ1Y?mcid=5b81703830603d1d853ec947c81b9e77&th=1&psc=1&tag=googshopuk-21&linkCode=df0&hvadid=696350735931&hvpos=&hvnetw=g&hvrand=13288013822297472355&hvpone=&hvptwo=&hvqmt=&hvdev=m&hvdvcmdl=&hvlocint=&hvlocphy=9046941&hvtargid=pla-522034865884&psc=1&hvocijid=13288013822297472355-B01MRUSZ1Y-&hvexpln=0&gad_source=1" },
+      { id: "carcassonne-zman", sort: 6, title: "Z-Man Games My First Carcassonne", price: 32, shop: "Amazon", url: "https://www.amazon.co.uk/Z-Man-Games-Carcassonne-Players-Minutes/dp/B00JM5GT7W/ref=mp_s_a_1_1?adgrpid=193185331904&dib=eyJ2IjoiMSJ9.3PhDk8c21uxG0keRo-M2Zy9qUo8A8cOu3AmkffCK0a4mk29dvtcqUg84mLsG3fAU0NAbeMTam9AwJ4xTfeK13FQJIucG_xDonxjWYvDKfv4rcUkp6FZ_OyHU4pcMvxe8B32wcKwBh_8DwA86NjMQ9f77nvKPEZtG0aK3Txt3tSHeCKC4uG1DgQWKiXAMpFXaayZGiWgObmc79ItvvAsymQ.j5_vXCAso3cg7OOaVPh-jChutY4CkGU9xElQmPAh24I&dib_tag=se&gad_source=1&hvadid=793473414625&hvdev=m&hvexpln=0&hvlocphy=9046941&hvnetw=g&hvocijid=2082547601732043898--&hvqmt=e&hvrand=2082547601732043898&hvtargid=kwd-300218856450&hydadcr=29317_2575406_374731&keywords=carcassonne+junior&mcid=6411a088fb9d3b6992dbcbc592c3ea39&qid=1775743478&sr=8-1&ufe=app_do%3Aamzn1.fos.95fd378e-6299-4723-b1f1-3952ffba15af" },
+      { id: "uno-junior", sort: 7, title: "UNO Junior Card Game", price: 9, shop: "Amazon", url: "https://www.amazon.co.uk/Mattel-Games-GKF04-UNO-Junior/dp/B07Y94Y3JL/ref=asc_df_B07Y94Y3JL?mcid=bf0bb8a84797319f95da95373d805e61&tag=googshopuk-21&linkCode=df0&hvadid=697281466526&hvpos=&hvnetw=g&hvrand=14871746978227630457&hvpone=&hvptwo=&hvqmt=&hvdev=m&hvdvcmdl=&hvlocint=&hvlocphy=9046941&hvtargid=pla-937051689960&psc=1&hvocijid=14871746978227630457-B07Y94Y3JL-&hvexpln=0&gad_source=1" },
+      { id: "funny-bunny", sort: 8, title: "Ravensburger Funny Bunny", price: 23, shop: "Amazon", url: "https://www.amazon.co.uk/Ravensburger-21558-Funny-Bunny/dp/B00005JS7E/ref=asc_df_B00005JS7E?mcid=41484e04cab9331bb56aac2e75f20441&th=1&psc=1&tag=googshopuk-21&linkCode=df0&hvadid=697281466526&hvpos=&hvnetw=g&hvrand=8038174335641125007&hvpone=&hvptwo=&hvqmt=&hvdev=m&hvdvcmdl=&hvlocint=&hvlocphy=9046941&hvtargid=pla-433881546222&psc=1&hvocijid=8038174335641125007-B00005JS7E-&hvexpln=0&gad_source=1" },
+      { id: "nutcracker-book", sort: 9, title: "I Can Play: The Nutcracker (The Story Orchestra)", price: 15, shop: "Amazon", url: "https://www.amazon.co.uk/Can-Play-Nutcracker-Story-Orchestra/dp/1836002327/ref=mp_s_a_1_3?crid=2Q684L3Y8C2WW&dib=eyJ2IjoiMSJ9._NkFR0VdGyoZuyemT3eMek1qUte4hlWxpozfL2GJdE6P448zrjshR8eOYSHV8VT8iqmgVaHsAnqKlB9Bo21xuwAbpd7GBT8HTwhNRbnxYUJsPynYvcW1QVnpH8zHMNYOxX_0G6nm3VrNEpf8VxRKfrlCgEATimtgnfqJyJmFmLfEV29jis95G5yHow76RwxuFh3GfjPbOqfHppuy_Ij2oA.zDtGEiZA3YuYV_I7faX8_v4iILvOks1KUr5JuJPE2lg&dib_tag=se&keywords=the+story+orchestra+i+can+play&qid=1776162744&sprefix=The+Story+Orchestra+I+CAN+PLAY%2Caps%2C480&sr=8-3" },
+      { id: "magna-tiles", sort: 10, title: "MAGNA-TILES Clear Colours 32 Piece Set", price: 35, shop: "Argos", url: "https://www.argos.co.uk/product/4077792?clickSR=slp:term:magna-tiles:1:9:1" },
+      { id: "balance-board", sort: 11, title: "SmartToys4U Wooden Balance Board", price: 66, shop: "Amazon", url: "https://www.amazon.co.uk/SmartToys4U-Balance-Natural-Montessori-children/dp/B0BZZB5XMW?colid=10RD1EHNF8H8C&sbo=RZvfv%2F%2FHxDF%2BO5021pAnSA%3D%3D" },
+      { id: "stepping-stones", sort: 12, title: "Lehoo Castle Stepping Stones", price: 40, shop: "Amazon", url: "https://www.amazon.co.uk/Lehoo-Castle-Stepping-Non-Slip-Obstacle/dp/B0D78X9VQ2/ref=mp_s_a_1_8?crid=2T5RIBCUEDB3D&dib=eyJ2IjoiMSJ9.1tTd107jeQglkq2ZzLcwj2dNPicWexZyJu8fEjfC4cskqM3I4JZUZEYsXH8lP6nHpSdXl4g3oPTWGq2Wpv5T-7QQWI6bHu8f23XtF9ustBCxgMScOo60y8zYfrAM6V39bZbRHTwwxnBu06LlDg-a2PcbqLpaeqrQ0r2uH8pOqqn-6H501JjKwPx7YMdhFr6X1zx75VjXTDz0K6F6lTLckQ.BdjaFgjkWd-UhMwHA7c4lN-ceoUfmbqCB1TAWcVEC6I&dib_tag=se&keywords=stepping+stones&qid=1776540900&refinements=p_72%3A184323031&rnid=184305031&sprefix=stepping+stones%2Caps%2C271&sr=8-8" },
+      { id: "mini-micro", sort: 13, title: "Mini Micro Foldable LED Navy scooter", price: 107, shop: "Micro Scooters", url: "https://www.micro-scooters.co.uk/products/mini-micro-scooter-foldable-light-up-navy?_pos=1&_fid=59a99faa8&_ss=c" }
+    ];
+
+    const STORAGE_KEY = 'platon-birthday-wishlist-v2';
+    const CHANNEL_NAME = 'platon-birthday-wishlist-channel';
+    let state = [];
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        state = defaultGifts.map(item => ({ ...item, claimed: false }));
+        saveState();
+        return;
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        const claimedMap = new Map(parsed.map(item => [item.id, item.claimed]));
+        state = defaultGifts.map(item => ({ ...item, claimed: Boolean(claimedMap.get(item.id)) }));
+      } catch {
+        state = defaultGifts.map(item => ({ ...item, claimed: false }));
+        saveState();
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      if ('BroadcastChannel' in window) {
+        const channel = new BroadcastChannel(CHANNEL_NAME);
+        channel.postMessage({ type: 'sync' });
+        channel.close();
+      }
+    }
+
+    function render() {
+      const tbody = document.getElementById('wishlistBody');
+      tbody.innerHTML = state.map(item => {
+        const status = item.claimed
+          ? '<span class="badge taken">Taken</span>'
+          : '<span class="badge">Available</span>';
+
+        return `
+          <tr class="${item.claimed ? 'claimed' : ''}">
+            <td data-label="Claim">
+              <label class="switch" aria-label="Claim ${item.title}">
+                <input type="checkbox" data-id="${item.id}" ${item.claimed ? 'checked' : ''} />
+                <span class="slider"></span>
+              </label>
+            </td>
+            <td data-label="Present">
+              <div class="gift-title">${item.title}</div>
+              <div class="gift-links"><a href="${item.url}" target="_blank" rel="noreferrer">Open item</a></div>
+            </td>
+            <td data-label="Price"><span class="price-pill">£${item.price}</span></td>
+            <td data-label="Shop">${item.shop}</td>
+            <td data-label="Status">${status}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function toggleClaim(id, claimed) {
+      state = state.map(item => item.id === id ? { ...item, claimed } : item);
+      saveState();
+      render();
+    }
+
+    function initSync() {
+      window.addEventListener('storage', (event) => {
+        if (event.key === STORAGE_KEY) {
+          loadState();
+          render();
+        }
+      });
+
+      if ('BroadcastChannel' in window) {
+        const channel = new BroadcastChannel(CHANNEL_NAME);
+        channel.addEventListener('message', () => {
+          loadState();
+          render();
+        });
+      }
+    }
+
+    function init() {
+      loadState();
+      render();
+      initSync();
+      document.getElementById('wishlistBody').addEventListener('change', (event) => {
+        const input = event.target;
+        if (!(input instanceof HTMLInputElement) || input.type !== 'checkbox') return;
+        toggleClaim(input.dataset.id, input.checked);
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
